@@ -1,1 +1,177 @@
-{}
+{
+	"version": "2",
+	"templates": [{
+			"type": 1,
+			"name": "filebrowser",
+			"title": "Filebrowser",
+			"description": "filebrowser provides a file managing interface within a specified directory and it can be used to upload, delete, preview, rename and edit your files.",
+			"logo": "https://mediadepot.github.io/templates/img/filebrowser-icon.png",
+			"image": "mediadepot/filebrowser:latest",
+			"categories": [
+				"Tools",
+				"Networkweb",
+				"Networkother"
+			],
+			"ports": [
+				"8080/tcp"
+			],
+			"command": "-d /config/filebrowser.db -p 8080",
+			"volumes": [{
+					"container": "/srv/tvshows",
+					"bind": "/media/storage/tvshows"
+				},
+				{
+					"container": "/srv/movies",
+					"bind": "/media/storage/movies"
+				},
+				{
+					"container": "/srv/music",
+					"bind": "/media/storage/music"
+				},
+				{
+					"container": "/srv/photos",
+					"bind": "/media/storage/photos"
+				},
+				{
+					"container": "/srv/ebooks",
+					"bind": "/media/storage/ebooks"
+				},
+				{
+					"container": "/srv/documents",
+					"bind": "/media/storage/documents"
+				},
+				{
+					"container": "/srv/software",
+					"bind": "/media/storage/software"
+				},
+				{
+					"container": "/srv/downloads",
+					"bind": "/media/storage/downloads"
+				},
+				{
+					"container": "/srv/blackhole",
+					"bind": "/media/temp/blackhole"
+				},
+				{
+					"container": "/srv/processing",
+					"bind": "/media/temp/processing"
+				},
+				{
+					"container": "/config",
+					"bind": "/opt/mediadepot/apps/filebrowser"
+				}
+			],
+			"env": [{
+				"name": "TZ",
+				"label": "TZ",
+				"default": "America/Los_Angeles"
+			}],
+			"labels": [{
+					"name": "traefik.enable",
+					"value": "true"
+				},
+				{
+					"name": "traefik.http.services.filebrowser.loadbalancer.server.port",
+					"value": "8080"
+				},
+				{
+					"name": "traefik.http.routers.filebrowser.entrypoints",
+					"value": "websecure"
+				},
+				{
+					"name": "traefik.http.routers.filebrowser.tls.certresolver",
+					"value": "mydnschallenge"
+				}
+			],
+			"maintainer": " https://github.com/mediadepot/templates/"
+		},
+		{
+			"categories": [
+				"Other",
+				"Tools"
+			],
+			"description": "A Linux network-level advertisement and Internet tracker blocking application which acts as a DNS sinkhole. This version has Ubound software installed on it so you don't need to rely on external DNS providers. When the installation is complete, navigate to your.ip.goes.here:1010/admin. Follow the article <a href='https://medium.com/@niktrix/getting-rid-of-systemd-resolved-consuming-port-53-605f0234f32f'>here</a>",
+			"env": [{
+					"default": "192.168.0.X",
+					"description": "Insert the Raspberry Pi IP here",
+					"label": "ServerIP",
+					"name": "ServerIP"
+				},
+				{
+					"default": "Europe\\London",
+					"label": "TZ",
+					"name": "TZ"
+				},
+				{
+					"label": "DNSSEC",
+					"name": "DNSSEC",
+					"select": [{
+							"default": true,
+							"text": "Enable DNSSEC",
+							"value": "true"
+						},
+						{
+							"text": "Disable DNSSEC",
+							"value": "false"
+						}
+					]
+				},
+				{
+					"default": "127.0.0.1#5335",
+					"label": "DNS1",
+					"name": "DNS1",
+					"preset": true
+				},
+				{
+					"default": "127.0.0.1#5335",
+					"label": "DNS2",
+					"name": "DNS2",
+					"preset": true
+				}
+			],
+			"image": "cbcrowe/pihole-unbound:latest",
+			"logo": "https://raw.githubusercontent.com/pi-hosted/pi-hosted/master/images/pihole-unbound.png",
+			"name": "pihole-unbound",
+			"note": "<b>Template created by Pi-Hosted Series</b><br><b>Check our Github page: <a href=\"https://github.com/pi-hosted/pi-hosted\" target=\"_blank\">https://github.com/pi-hosted/pi-hosted</a></b><br><br><b>Official Webpage: </b><a href=\"https://pi-hole.net/\" target=\"_blank\">https://pi-hole.net/</a><br><b>Official Docker Documentation: </b><a href=\"https://github.com/chriscrowe/docker-pihole-unbound/tree/master/one-container\" target=\"_blank\">https://github.com/chriscrowe/docker-pihole-unbound/tree/master/one-container</a><br><h3><b>Pi-Hosted dedicated documentation: </b><a href=\"https://github.com/pi-hosted/pi-hosted/blob/master/docs/pi-hole.md\" target=\"_blank\">pi-hole.md</a></h3><br><br><br>When the installation is complete, navigate to your.ip.goes.here:1010/admin. Follow the article <a href='https://medium.com/@niktrix/getting-rid-of-systemd-resolved-consuming-port-53-605f0234f32f'>here</a> if you run into issues binding to port 53. For extra information on this container visit the mainteiner <a href='https://github.com/chriscrowe/docker-pihole-unbound/tree/master/one-container'>GitHub Page</a>. You can add ports: 5335 to access Ubound externally; 22 to enable SSH; 67 to use DHCP Server. Add those ports in Show advanced options. if you run into issues binding to port 53. If you like to use Pi-Hole's built in DHCP-Server change the Network type to host and open advance options and scroll to Labels and add: NET_ADMIN with the value True. When you do so, specify a port is no more needed, navigate to your.ip.goes.here/admin.",
+			"platform": "linux",
+			"ports": [
+				"53:53/tcp",
+				"53:53/udp",
+				"1010:80/tcp",
+				"4443:443/tcp"
+			],
+			"restart_policy": "unless-stopped",
+			"title": "Pi-Hole-Unbound",
+			"type": 1,
+			"volumes": [{
+					"bind": "/portainer/Files/AppData/Config/PiHole-Unbound",
+					"container": "/etc/pihole"
+				},
+				{
+					"bind": "/portainer/Files/AppData/Config/PiHole-Unbound/DNS",
+					"container": "/etc/dnsmasq.d"
+				}
+			],
+			"maintainer": " https://github.com/novaspirit/pi-hosted/"
+		},
+		{
+			"categories": [
+				"Analytics"
+			],
+			"description": "Umami is a simple, easy to use, self-hosted web analytics solution. The goal is to provide you with a friendlier, privacy-focused alternative to Google Analytics and a free, open-sourced alternative to paid solutions",
+			"logo": "https://icons.duckduckgo.com/ip3/umami.is.ico",
+			"name": "umami",
+			"platform": "linux",
+			"repository": {
+				"stackfile": "Template/Stack/umami.yml",
+				"url": "https://github.com/xneo1/portainer_templates"
+			},
+			"ports": [
+				"3000:3000/tcp"
+			],
+			"title": "Umami.is",
+			"type": 3,
+			"maintainer": " https://github.com/xneo1/portainer_templates/"
+		}
+	]
+}

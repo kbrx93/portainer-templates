@@ -1,0 +1,115 @@
+{
+  "version": "2",
+  "templates": [
+    {
+      "type": 1,
+      "name": "filebrowser",
+      "title": "Filebrowser",
+      "image": "mediadepot/filebrowser:latest",
+      "restart_policy": "unless-stopped",
+      "description": "filebrowser provides a file managing interface within a specified directory and it can be used to upload, delete, preview, rename and edit your files.",
+      "logo": "https://mediadepot.github.io/templates/img/filebrowser-icon.png",
+      "platform": "linux",
+      "categories": [
+        "Demo"
+      ],
+      "ports": [
+        "8080/tcp"
+      ],
+      "command": "-d /config/filebrowser.db -p 8080",
+      "volumes": [
+        {
+          "container": "/srv/tvshows",
+          "bind": "/media/storage/tvshows"
+        }
+      ],
+      "env": [
+        {
+          "name": "TZ",
+          "label": "TZ",
+          "default": "America/Los_Angeles"
+        }
+      ],
+      "labels": [
+        {
+          "name": "traefik.enable",
+          "value": "true"
+        }
+      ],
+      "maintainer": " https://github.com/mediadepot/templates/"
+    },
+    {
+      "type": 1,
+      "name": "pihole-unbound",
+      "title": "Pi-Hole-Unbound",
+      "image": "cbcrowe/pihole-unbound:latest",
+      "restart_policy": "unless-stopped",
+      "logo": "https://raw.githubusercontent.com/pi-hosted/pi-hosted/master/images/pihole-unbound.png",
+      "description": "A Linux network-level advertisement and Internet tracker blocking application which acts as a DNS sinkhole. This version has Ubound software installed on it so you don't need to rely on external DNS providers. When the installation is complete, navigate to your.ip.goes.here:1010/admin. Follow the article <a href='https://medium.com/@niktrix/getting-rid-of-systemd-resolved-consuming-port-53-605f0234f32f'>here</a>",
+      "note": "<b>Template created by Pi-Hosted Series</b><br><b>Check our Github page: <a href=\"https://github.com/pi-hosted/pi-hosted\" target=\"_blank\">https://github.com/pi-hosted/pi-hosted</a></b><br><br><b>Official Webpage: </b><a href=\"https://pi-hole.net/\" target=\"_blank\">https://pi-hole.net/</a><br><b>Official Docker Documentation: </b><a href=\"https://github.com/chriscrowe/docker-pihole-unbound/tree/master/one-container\" target=\"_blank\">https://github.com/chriscrowe/docker-pihole-unbound/tree/master/one-container</a><br><h3><b>Pi-Hosted dedicated documentation: </b><a href=\"https://github.com/pi-hosted/pi-hosted/blob/master/docs/pi-hole.md\" target=\"_blank\">pi-hole.md</a></h3><br><br><br>When the installation is complete, navigate to your.ip.goes.here:1010/admin. Follow the article <a href='https://medium.com/@niktrix/getting-rid-of-systemd-resolved-consuming-port-53-605f0234f32f'>here</a> if you run into issues binding to port 53. For extra information on this container visit the mainteiner <a href='https://github.com/chriscrowe/docker-pihole-unbound/tree/master/one-container'>GitHub Page</a>. You can add ports: 5335 to access Ubound externally; 22 to enable SSH; 67 to use DHCP Server. Add those ports in Show advanced options. if you run into issues binding to port 53. If you like to use Pi-Hole's built in DHCP-Server change the Network type to host and open advance options and scroll to Labels and add: NET_ADMIN with the value True. When you do so, specify a port is no more needed, navigate to your.ip.goes.here/admin.",
+      "platform": "linux",
+      "categories": [
+        "Demo"
+      ],
+      "ports": [
+        "53:53/tcp",
+        "53:53/udp"
+      ],
+      "volumes": [
+        {
+          "bind": "/portainer/Files/AppData/Config/PiHole-Unbound",
+          "container": "/etc/pihole"
+        }
+      ],
+      "env": [
+        {
+          "name": "ServerIP",
+          "label": "ServerIP",
+          "default": "192.168.0.X",
+          "description": "Insert the Raspberry Pi IP here"
+        },
+        {
+          "name": "DNSSEC",
+          "label": "DNSSEC",
+          "select": [
+            {
+              "default": true,
+              "text": "Enable DNSSEC",
+              "value": "true"
+            },
+            {
+              "text": "Disable DNSSEC",
+              "value": "false"
+            }
+          ]
+        },
+        {
+          "name": "DNS1",
+          "label": "DNS1",
+          "default": "127.0.0.1#5335",
+          "preset": true
+        }
+      ],
+      "maintainer": " https://github.com/novaspirit/pi-hosted/"
+    },
+    {
+      "type": 3,
+      "name": "umami",
+      "title": "Umami.is",
+      "repository": {
+        "stackfile": "Template/Stack/umami.yml",
+        "url": "https://github.com/xneo1/portainer_templates"
+      },
+      "description": "Umami is a simple, easy to use, self-hosted web analytics solution. The goal is to provide you with a friendlier, privacy-focused alternative to Google Analytics and a free, open-sourced alternative to paid solutions",
+      "logo": "https://icons.duckduckgo.com/ip3/umami.is.ico",
+      "platform": "linux",
+      "categories": [
+        "Analytics"
+      ],
+      "ports": [
+        "3000:3000/tcp"
+      ],
+      "maintainer": " https://github.com/xneo1/portainer_templates/"
+    }
+  ]
+}
